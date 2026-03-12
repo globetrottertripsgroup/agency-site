@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Trip Planner</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="quiz-container">
+<h1>Trip Planner</h1>
+
+<form id="quizForm">
+
+<label>What type of trip?</label>
+<select name="tripType">
+<option>Cruise</option>
+<option>Disney</option>
+<option>All Inclusive Resort</option>
+<option>Europe</option>
+<option>Adventure</option>
+</select>
+
+<label>Budget Range</label>
+<select name="budget">
+<option>$2000-$4000</option>
+<option>$4000-$7000</option>
+<option>$7000+</option>
+</select>
+
+<label>Travelers</label>
+<input name="travelers" type="text">
+
+<label>When do you want to travel?</label>
+<input name="dates" type="text">
+
+<button type="submit">See My Trip Recommendation</button>
+
+</form>
+</div>
+
+<script src="quiz.js"></script>
+</body>
+</html>

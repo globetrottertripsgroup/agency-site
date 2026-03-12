@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Trip Recommendation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="results">
+<h1>Your Recommended Trip</h1>
+<p id="recommendation"></p>
+<a class="cta" href="contact.html">Get My Custom Quote</a>
+</div>
+
+<script>
+const trip = localStorage.getItem("tripType");
+
+let text = "";
+
+if(trip === "Cruise") text="A Caribbean Cruise would be perfect for you.";
+if(trip === "Disney") text="A Disney vacation package is a great fit.";
+if(trip === "All Inclusive Resort") text="A Mexico or Caribbean all-inclusive resort fits your style.";
+if(trip === "Europe") text="A custom Europe itinerary is recommended.";
+if(trip === "Adventure") text="An adventure trip like Costa Rica could be perfect.";
+
+document.getElementById("recommendation").innerText = text;
+</script>
+
+</body>
+</html>
