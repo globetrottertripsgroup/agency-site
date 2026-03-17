@@ -574,7 +574,15 @@
   </div>
 </div>
 
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
+  /* ── EmailJS credentials ── */
+  const EJS_SERVICE  = 'service_8inzzwo';
+  const EJS_TEMPLATE = 'template_mjue6ae';
+  const EJS_KEY      = 'XCHwm0GGfXR27x29s';
+  emailjs.init({ publicKey: EJS_KEY });
+
   /* ── Scroll & nav ── */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -596,7 +604,7 @@
     document.body.style.overflow = '';
   }
   function resetForm() {
-    document.getElementById('modalForm').style.display  = 'block';
+    document.getElementById('modalForm').style.display    = 'block';
     document.getElementById('modalSuccess').style.display = 'none';
     const btn = document.getElementById('submitBtn');
     btn.disabled    = false;
@@ -607,7 +615,6 @@
     });
     document.getElementById('interest').selectedIndex = 0;
   }
-  /* Close on backdrop click — only if the click landed on the backdrop itself */
   document.getElementById('modalBackdrop').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
@@ -618,19 +625,18 @@
     el.addEventListener('click', e => { e.preventDefault(); openModal(); });
   });
 
-  /* ── Form submission ── */
+  /* ── Form submission via EmailJS ── */
   function submitForm() {
-    const btn   = document.getElementById('submitBtn');
-    const fname = document.getElementById('fname').value.trim();
-    const lname = document.getElementById('lname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const interest  = document.getElementById('interest').value;
-    const travelers = document.getElementById('travelers').value.trim();
+    const btn        = document.getElementById('submitBtn');
+    const fname      = document.getElementById('fname').value.trim();
+    const lname      = document.getElementById('lname').value.trim();
+    const email      = document.getElementById('email').value.trim();
+    const phone      = document.getElementById('phone').value.trim();
+    const interest   = document.getElementById('interest').value;
+    const travelers  = document.getElementById('travelers').value.trim();
     const travelDate = document.getElementById('travel-date').value;
-    const notes = document.getElementById('notes').value.trim();
+    const notes      = document.getElementById('notes').value.trim();
 
-    /* Basic validation */
     if (!fname || !lname) { alert('Please enter your first and last name.'); return; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert('Please enter a valid email address.'); return;
@@ -639,37 +645,32 @@
     btn.disabled    = true;
     btn.textContent = 'Sending…';
 
-    /* Build the mailto href — this is a direct, zero-dependency delivery
-       that works on every browser and hosting platform with no API keys. */
-    const subject = encodeURIComponent('New Trip Request — ' + fname + ' ' + lname);
-    const body = encodeURIComponent(
-      'TRIP REQUEST FROM GLOBETROTTER TRIPS WEBSITE\n' +
-      '=============================================\n\n' +
-      'Name:            ' + fname + ' ' + lname + '\n' +
-      'Email:           ' + email + '\n' +
-      'Phone:           ' + (phone       || 'Not provided') + '\n' +
-      'Trip Type:       ' + (interest    || 'Not specified') + '\n' +
-      'No. of Travelers:' + (travelers   || 'Not specified') + '\n' +
-      'Travel Date:     ' + (travelDate  || 'Not specified') + '\n\n' +
-      'Additional Notes:\n' + (notes || 'None') + '\n'
-    );
+    const templateParams = {
+      from_name:    fname + ' ' + lname,
+      from_email:   email,
+      phone:        phone        || 'Not provided',
+      trip_type:    interest     || 'Not specified',
+      travelers:    travelers    || 'Not specified',
+      travel_date:  travelDate   || 'Not specified',
+      notes:        notes        || 'None',
+      to_email:     'globetrottertripsgroup@gmail.com'
+    };
 
-    const mailtoLink = 'mailto:globetrottertripsgroup@gmail.com'
-      + '?subject=' + subject
-      + '&body='    + body;
-
-    /* Open the mail client directly — this is a synchronous user-gesture
-       triggered call so browsers permit it without blocking. */
-    window.open(mailtoLink, '_self');
-
-    /* Show success message, then redirect to top of page after delay */
-    document.getElementById('modalForm').style.display    = 'none';
-    document.getElementById('modalSuccess').style.display = 'block';
-
-    setTimeout(() => {
-      closeModal();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 2500);
+    emailjs.send(EJS_SERVICE, EJS_TEMPLATE, templateParams)
+      .then(() => {
+        document.getElementById('modalForm').style.display    = 'none';
+        document.getElementById('modalSuccess').style.display = 'block';
+        setTimeout(() => {
+          closeModal();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 2500);
+      })
+      .catch((err) => {
+        console.error('EmailJS error:', err);
+        alert('Oops — something went wrong sending your request. Please call us at 469-240-9925 or email globetrottertripsgroup@gmail.com directly.');
+        btn.disabled    = false;
+        btn.textContent = 'Send My Trip Request ✈';
+      });
   }
 </script>
 </body>
