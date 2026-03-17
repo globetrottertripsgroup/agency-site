@@ -445,7 +445,7 @@
       </div>
       <div>
         <p style="font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.4rem;">Email Us</p>
-        <a href="mailto:globetrottertripsgroup@gmail.com" style="font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--ink); text-decoration: none; transition: color 0.2s; word-break: break-all;" onmouseover="this.style.color='var(--royal)'" onmouseout="this.style.color='var(--ink)'">globetrottertripsgroup@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#dfb8b3b0bdbaabadb0ababbaadabadb6afacb8adb0aaaf9fb8b2beb6b3f1bcb0b2" style="font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--ink); text-decoration: none; transition: color 0.2s; word-break: break-all;" onmouseover="this.style.color='var(--royal)'" onmouseout="this.style.color='var(--ink)'"><span class="__cf_email__" data-cfemail="1e7972717c7b6a6c716a6a7b6c6a6c776e6d796c716b6e5e79737f7772307d7173">[email&#160;protected]</span></a>
       </div>
     </div>
   </div>
@@ -574,7 +574,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
@@ -590,13 +590,17 @@
   function closeModal() {
     document.getElementById('modalBackdrop').classList.remove('open');
     document.body.style.overflow = '';
+    // Reset form for next open
+    document.getElementById('modalForm').style.display = 'block';
+    document.getElementById('modalSuccess').style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'Send My Trip Request ✈';
   }
   function handleBackdropClick(e) {
     if (e.target === document.getElementById('modalBackdrop')) closeModal();
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  // Also wire all "Plan Your Trip" / "Get a Free Quote" CTA buttons to open modal
   document.querySelectorAll('a[href="#contact"], .btn-white').forEach(el => {
     el.addEventListener('click', e => { e.preventDefault(); openModal(); });
   });
@@ -606,36 +610,52 @@
     const fname = document.getElementById('fname').value.trim();
     const lname = document.getElementById('lname').value.trim();
     const email = document.getElementById('email').value.trim();
-    if (!fname || !lname || !email) { alert('Please fill in your name and email.'); return; }
+    if (!fname || !lname || !email) {
+      alert('Please fill in your first name, last name, and email address.');
+      return;
+    }
 
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    const body = {
-      _replyto: email,
-      _subject: `New Trip Request — ${fname} ${lname}`,
+    const formData = {
+      access_key: 'b3952643-4f3b-4d7d-b928-6a5b0c8e9f12',
+      subject: `New Trip Request — ${fname} ${lname}`,
+      from_name: 'Globetrotter Trips Website',
+      replyto: email,
       Name: `${fname} ${lname}`,
       Email: email,
-      Phone: document.getElementById('phone').value || 'Not provided',
+      Phone: document.getElementById('phone').value.trim() || 'Not provided',
       'Trip Type': document.getElementById('interest').value || 'Not specified',
-      Travelers: document.getElementById('travelers').value || 'Not specified',
+      'Number of Travelers': document.getElementById('travelers').value || 'Not specified',
       'Travel Date': document.getElementById('travel-date').value || 'Not specified',
-      Notes: document.getElementById('notes').value || 'None'
+      'Additional Notes': document.getElementById('notes').value.trim() || 'None'
     };
 
     try {
-      const res = await fetch('https://formspree.io/f/globetrottertripsgroup@gmail.com', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(formData)
       });
-      // Show success regardless — Formspree requires one-time activation click from email
-      document.getElementById('modalForm').style.display = 'none';
-      document.getElementById('modalSuccess').style.display = 'block';
-    } catch(err) {
-      // Fallback: open mailto
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('modalForm').style.display = 'none';
+        document.getElementById('modalSuccess').style.display = 'block';
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      // Fallback: pre-filled mailto so the inquiry is never lost
       const subject = encodeURIComponent(`New Trip Request — ${fname} ${lname}`);
-      const bodyText = encodeURIComponent(
-        `Name: ${fname} ${lname}\nEmail: ${email}\nPhone: ${body.Phone}\nTrip Type: ${body['Trip Type']}\nTravelers: ${body.Travelers}\nTravel Date: ${body['Travel Date']}\nNotes: ${body.Notes}`
+      const body = encodeURIComponent(
+        `Name: ${fname} ${lname}\nEmail: ${email}\nPhone: ${formData.Phone}\nTrip Type: ${formData['Trip Type']}\nTravelers: ${formData['Number of Travelers']}\nTravel Date: ${formData['Travel Date']}\nNotes: ${formData['Additional Notes']}`
       );
-      window.location.href = `mailto:globetrottertripsgroup@gmail.
+      window.location.href = `mailto:globetrottertripsgroup@gmail.com?subject=${subject}&body=${body}`;
+      btn.disabled = false;
+      btn.textContent = 'Send My Trip Request ✈';
+    }
+  }
+</script>
+</body>
+</html>
