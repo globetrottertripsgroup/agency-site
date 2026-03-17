@@ -89,9 +89,10 @@
   .see-all::after { content: '→'; }
 
   /* PARK GRID */
-  .highlights-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 220px 220px; gap: 16px; }
+  .highlights-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 175px 175px 175px; gap: 16px; }
   .dest-card { position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; background: var(--sky); }
-  .highlights-grid > a:first-child .dest-card { grid-row: span 2; }
+  .highlights-grid > a:first-child { grid-row: span 3; }
+  .highlights-grid > a:first-child .dest-card { height: 100%; }
   .highlights-grid > a:first-child .dest-name { font-size: 2.4rem; }
   .dest-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.6s ease; }
   .dest-card:hover .dest-card-bg { transform: scale(1.04); }
