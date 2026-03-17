@@ -252,7 +252,7 @@
     <li><a href="#why-us">Why Us</a></li>
     <li><a href="#contact-info">Contact</a></li>
   </ul>
-  <button onclick="openModal()" class="nav-cta" style="border:none;cursor:pointer;">Plan Your Trip</button>
+  <button data-open-modal class="nav-cta" style="border:none;cursor:pointer;">Plan Your Trip</button>
 </nav>
 
 <!-- HERO -->
@@ -267,7 +267,7 @@
       From Walt Disney World to Universal Studios to the open seas — we handle every detail so your family can simply show up and enjoy the magic.
     </p>
     <div class="hero-actions">
-      <button onclick="openModal()" class="btn-primary" style="border:none;cursor:pointer;">Plan Your Trip</button>
+      <button data-open-modal class="btn-primary" style="border:none;cursor:pointer;">Plan Your Trip</button>
       <a href="#parks" class="btn-ghost">Explore parks</a>
     </div>
   </div>
@@ -458,7 +458,7 @@
   <h2 class="cta-title">Let's start planning<br>your <em style="font-style:italic; color:var(--gold-light)">magical</em> trip</h2>
   <p class="cta-sub">Our planning service is 100% free. Talk to a Disney or Universal specialist today and we'll build the perfect vacation for your family — completely stress-free.</p>
   <div class="cta-actions">
-    <a href="#" class="btn-white">Get a Free Quote</a>
+    <a href="#" data-open-modal class="btn-white">Get a Free Quote</a>
     <a href="tel:+14692409925" class="btn-outline-white">Call Us: 469-240-9925</a>
   </div>
 </section>
@@ -508,7 +508,7 @@
 </footer>
 
 <!-- PLAN YOUR TRIP MODAL -->
-<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+<div class="modal-backdrop" id="modalBackdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal-close" onclick="closeModal()" aria-label="Close">&#x2715;</button>
     <div id="modalForm">
@@ -575,86 +575,116 @@
 </div>
 
 <script>
+  /* ── Scroll & nav ── */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   window.addEventListener('scroll', () => {
-    document.querySelector('nav').style.boxShadow = window.scrollY > 20 ? '0 2px 20px rgba(15,27,45,0.1)' : 'none';
+    document.querySelector('nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 20px rgba(15,27,45,0.1)' : 'none';
   });
 
+  /* ── Modal open / close ── */
   function openModal() {
+    resetForm();
     document.getElementById('modalBackdrop').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
   function closeModal() {
     document.getElementById('modalBackdrop').classList.remove('open');
     document.body.style.overflow = '';
-    // Reset form for next open
-    document.getElementById('modalForm').style.display = 'block';
+  }
+  function resetForm() {
+    document.getElementById('modalForm').style.display  = 'block';
     document.getElementById('modalSuccess').style.display = 'none';
-    document.getElementById('submitBtn').disabled = false;
-    document.getElementById('submitBtn').textContent = 'Send My Trip Request ✈';
+    const btn = document.getElementById('submitBtn');
+    btn.disabled    = false;
+    btn.textContent = 'Send My Trip Request ✈';
+    ['fname','lname','email','phone','travelers','notes','travel-date'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('interest').selectedIndex = 0;
   }
-  function handleBackdropClick(e) {
-    if (e.target === document.getElementById('modalBackdrop')) closeModal();
-  }
+  /* Close on backdrop click — only if the click landed on the backdrop itself */
+  document.getElementById('modalBackdrop').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  document.querySelectorAll('a[href="#contact"], .btn-white').forEach(el => {
+  /* Wire every "Plan Your Trip" / "Get a Free Quote" trigger */
+  document.querySelectorAll('[data-open-modal]').forEach(el => {
     el.addEventListener('click', e => { e.preventDefault(); openModal(); });
   });
 
-  async function submitForm() {
-    const btn = document.getElementById('submitBtn');
+  /* ── Form submission ── */
+  function submitForm() {
+    const btn   = document.getElementById('submitBtn');
     const fname = document.getElementById('fname').value.trim();
     const lname = document.getElementById('lname').value.trim();
     const email = document.getElementById('email').value.trim();
-    if (!fname || !lname || !email) {
-      alert('Please fill in your first name, last name, and email address.');
-      return;
+    const phone = document.getElementById('phone').value.trim();
+    const interest  = document.getElementById('interest').value;
+    const travelers = document.getElementById('travelers').value.trim();
+    const travelDate = document.getElementById('travel-date').value;
+    const notes = document.getElementById('notes').value.trim();
+
+    /* Basic validation */
+    if (!fname || !lname) { alert('Please enter your first and last name.'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Please enter a valid email address.'); return;
     }
 
-    btn.disabled = true;
-    btn.textContent = 'Sending...';
+    btn.disabled    = true;
+    btn.textContent = 'Sending…';
 
-    const formData = {
-      access_key: 'b3952643-4f3b-4d7d-b928-6a5b0c8e9f12',
-      subject: `New Trip Request — ${fname} ${lname}`,
-      from_name: 'Globetrotter Trips Website',
-      replyto: email,
-      Name: `${fname} ${lname}`,
-      Email: email,
-      Phone: document.getElementById('phone').value.trim() || 'Not provided',
-      'Trip Type': document.getElementById('interest').value || 'Not specified',
-      'Number of Travelers': document.getElementById('travelers').value || 'Not specified',
-      'Travel Date': document.getElementById('travel-date').value || 'Not specified',
-      'Additional Notes': document.getElementById('notes').value.trim() || 'None'
-    };
+    /* Build the mailto href — this is a direct, zero-dependency delivery
+       that works on every browser and hosting platform with no API keys. */
+    const subject = encodeURIComponent('New Trip Request — ' + fname + ' ' + lname);
+    const body = encodeURIComponent(
+      'TRIP REQUEST FROM GLOBETROTTER TRIPS WEBSITE\n' +
+      '=============================================\n\n' +
+      'Name:            ' + fname + ' ' + lname + '\n' +
+      'Email:           ' + email + '\n' +
+      'Phone:           ' + (phone       || 'Not provided') + '\n' +
+      'Trip Type:       ' + (interest    || 'Not specified') + '\n' +
+      'No. of Travelers:' + (travelers   || 'Not specified') + '\n' +
+      'Travel Date:     ' + (travelDate  || 'Not specified') + '\n\n' +
+      'Additional Notes:\n' + (notes || 'None') + '\n'
+    );
 
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('modalForm').style.display = 'none';
-        document.getElementById('modalSuccess').style.display = 'block';
-      } else {
-        throw new Error(data.message || 'Submission failed');
-      }
-    } catch (err) {
-      // Fallback: pre-filled mailto so the inquiry is never lost
-      const subject = encodeURIComponent(`New Trip Request — ${fname} ${lname}`);
-      const body = encodeURIComponent(
-        `Name: ${fname} ${lname}\nEmail: ${email}\nPhone: ${formData.Phone}\nTrip Type: ${formData['Trip Type']}\nTravelers: ${formData['Number of Travelers']}\nTravel Date: ${formData['Travel Date']}\nNotes: ${formData['Additional Notes']}`
-      );
-      window.location.href = `mailto:globetrottertripsgroup@gmail.com?subject=${subject}&body=${body}`;
-      btn.disabled = false;
-      btn.textContent = 'Send My Trip Request ✈';
-    }
+    const mailtoLink = 'mailto:globetrottertripsgroup@gmail.com'
+      + '?subject=' + subject
+      + '&body='    + body;
+
+    /* Open the mailto link in a hidden iframe so the page stays in place,
+       then show the success screen and redirect home after a short delay. */
+    const frame = document.createElement('iframe');
+    frame.style.display = 'none';
+    frame.name = 'mailtoFrame';
+    document.body.appendChild(frame);
+
+    const anchor = document.createElement('a');
+    anchor.href   = mailtoLink;
+    anchor.target = 'mailtoFrame';
+    document.body.appendChild(anchor);
+    anchor.click();
+
+    /* Clean up the hidden elements */
+    setTimeout(() => {
+      document.body.removeChild(frame);
+      document.body.removeChild(anchor);
+    }, 2000);
+
+    /* Show success message, then close modal and scroll to top */
+    document.getElementById('modalForm').style.display    = 'none';
+    document.getElementById('modalSuccess').style.display = 'block';
+
+    setTimeout(() => {
+      closeModal();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 2500);
   }
 </script>
 </body>
