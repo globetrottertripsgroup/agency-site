@@ -89,20 +89,21 @@
   .see-all::after { content: '→'; }
 
   /* PARK GRID */
-  .highlights-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 186px 186px 186px; gap: 16px; }
-  .dest-card:nth-child(1) { grid-row: 1 / 4; }
+  .highlights-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 220px 220px; gap: 16px; }
   .dest-card { position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; background: var(--sky); }
+  .highlights-grid > a:first-child .dest-card { grid-row: span 2; }
+  .highlights-grid > a:first-child .dest-name { font-size: 2.4rem; }
   .dest-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.6s ease; }
   .dest-card:hover .dest-card-bg { transform: scale(1.04); }
   .dest-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,20,50,0.82) 0%, rgba(10,20,50,0.1) 50%, transparent 100%); }
   .dest-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.75rem; color: white; }
   .dest-region { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.4rem; font-weight: 400; }
   .dest-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; line-height: 1.1; }
-  .dest-card:nth-child(1) .dest-name { font-size: 2.4rem; }
   .dest-tag { display: inline-block; margin-top: 0.75rem; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(26,86,164,0.85); padding: 0.3rem 0.75rem; border-radius: 2px; font-weight: 500; }
   .dest-tag.gold-tag { background: rgba(232,160,32,0.9); }
 
-  .bg-disney-magic { background-color: #4466AA; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 500'%3E%3Crect fill='%234466AA' width='300' height='500'/%3E%3Crect fill='%235577BB' x='0' y='300' width='300' height='200'/%3E%3Crect x='100' y='250' width='100' height='250' fill='%233355AA'/%3E%3Crect x='120' y='200' width='60' height='60' fill='%233A5FB5'/%3E%3Crect x='135' y='160' width='30' height='50' fill='%23AACCEE'/%3E%3Cpolygon points='150,100 135,160 165,160' fill='%23FFDD44'/%3E%3Crect x='50' y='280' width='40' height='220' fill='%233355AA'/%3E%3Cpolygon points='70,220 50,280 90,280' fill='%23AACCEE'/%3E%3Crect x='210' y='280' width='40' height='220' fill='%233355AA'/%3E%3Cpolygon points='230,220 210,280 250,280' fill='%23AACCEE'/%3E%3Ccircle cx='150' cy='80' r='12' fill='%23FFDD44' opacity='0.9'/%3E%3C/svg%3E"); }
+  .bg-aulani { background-color: #1A7A6E; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%231A7A6E' width='200' height='200'/%3E%3Crect fill='%2322AACC' x='0' y='120' width='200' height='80'/%3E%3Cellipse cx='100' cy='120' rx='200' ry='30' fill='%231A90AA' opacity='0.6'/%3E%3Cpath d='M30 120 Q50 80 70 90 Q90 100 110 70 Q130 40 160 60 Q180 75 200 65 L200 120Z' fill='%23186655'/%3E%3Ccircle cx='155' cy='45' r='22' fill='%23F5C84A' opacity='0.85'/%3E%3Cpath d='M60 90 Q65 60 70 90' fill='none' stroke='%2300AA77' stroke-width='3'/%3E%3Cellipse cx='70' cy='58' rx='12' ry='8' fill='%2300CC88' transform='rotate(-20 70 58)'/%3E%3C/svg%3E"); }
+  .bg-universal-hollywood { background-color: #1A1A2E; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%231A1A2E' width='200' height='200'/%3E%3Crect fill='%230D0D1A' x='0' y='130' width='200' height='70'/%3E%3Crect x='20' y='90' width='18' height='110' fill='%23252540'/%3E%3Crect x='55' y='70' width='22' height='130' fill='%231E1E38'/%3E%3Crect x='95' y='80' width='16' height='120' fill='%23252540'/%3E%3Crect x='128' y='60' width='24' height='140' fill='%231E1E38'/%3E%3Crect x='165' y='85' width='18' height='115' fill='%23252540'/%3E%3Ccircle cx='150' cy='35' r='18' fill='%23F5C84A' opacity='0.7'/%3E%3Ccircle cx='150' cy='35' r='10' fill='%23F5C84A' opacity='0.5'/%3E%3Cline x1='150' y1='0' x2='150' y2='17' stroke='%23F5C84A' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='150' y1='53' x2='150' y2='70' stroke='%23F5C84A' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='115' y1='35' x2='132' y2='35' stroke='%23F5C84A' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='168' y1='35' x2='185' y2='35' stroke='%23F5C84A' stroke-width='1.5' opacity='0.4'/%3E%3C/svg%3E"); } background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 500'%3E%3Crect fill='%234466AA' width='300' height='500'/%3E%3Crect fill='%235577BB' x='0' y='300' width='300' height='200'/%3E%3Crect x='100' y='250' width='100' height='250' fill='%233355AA'/%3E%3Crect x='120' y='200' width='60' height='60' fill='%233A5FB5'/%3E%3Crect x='135' y='160' width='30' height='50' fill='%23AACCEE'/%3E%3Cpolygon points='150,100 135,160 165,160' fill='%23FFDD44'/%3E%3Crect x='50' y='280' width='40' height='220' fill='%233355AA'/%3E%3Cpolygon points='70,220 50,280 90,280' fill='%23AACCEE'/%3E%3Crect x='210' y='280' width='40' height='220' fill='%233355AA'/%3E%3Cpolygon points='230,220 210,280 250,280' fill='%23AACCEE'/%3E%3Ccircle cx='150' cy='80' r='12' fill='%23FFDD44' opacity='0.9'/%3E%3C/svg%3E"); }
   .bg-universal { background-color: #1A1A2E; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%231A1A2E' width='200' height='200'/%3E%3Ccircle cx='100' cy='100' r='75' fill='none' stroke='%23AACCEE' stroke-width='3' opacity='0.6'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%2388AACC' stroke-width='1.5' opacity='0.4'/%3E%3Cellipse cx='100' cy='100' rx='75' ry='30' fill='none' stroke='%23AACCEE' stroke-width='1.5' opacity='0.5'/%3E%3Ccircle cx='100' cy='100' r='10' fill='%23FFCC44'/%3E%3C/svg%3E"); }
   .bg-cruise { background-color: #0A5070; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%230A5070' width='200' height='200'/%3E%3Crect fill='%23084060' x='0' y='110' width='200' height='90'/%3E%3Cpath d='M10 110 L20 85 L180 85 L190 110Z' fill='%23F0F4F8'/%3E%3Crect x='40' y='60' width='120' height='30' fill='%23E8EEF5'/%3E%3Crect x='55' y='42' width='90' height='22' fill='%23D8E4F0'/%3E%3Crect x='72' y='24' width='22' height='22' fill='%23C8D8E8'/%3E%3Crect x='106' y='26' width='20' height='20' fill='%23C8D8E8'/%3E%3Ccircle cx='83' cy='20' r='5' fill='%23CC3333'/%3E%3Ccircle cx='116' cy='22' r='4' fill='%23CC3333'/%3E%3Crect fill='%2322AACC' x='0' y='140' width='200' height='60' opacity='0.4'/%3E%3C/svg%3E"); }
   .bg-epcot { background-color: #224466; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23224466' width='200' height='200'/%3E%3Ccircle cx='100' cy='90' r='55' fill='%23336688'/%3E%3Ccircle cx='100' cy='90' r='42' fill='%23224466'/%3E%3Ccircle cx='100' cy='90' r='28' fill='%23336688'/%3E%3Ccircle cx='100' cy='90' r='14' fill='%23AACCEE'/%3E%3Crect x='96' y='10' width='8' height='35' fill='%23AACCEE'/%3E%3Crect x='96' y='135' width='8' height='35' fill='%23AACCEE'/%3E%3Crect x='10' y='86' width='35' height='8' fill='%23AACCEE'/%3E%3Crect x='155' y='86' width='35' height='8' fill='%23AACCEE'/%3E%3C/svg%3E"); }
@@ -358,6 +359,26 @@
       </div>
     </div>
     </a>
+    <a href="aulani.html" style="text-decoration:none;display:contents;">
+    <div class="dest-card" style="cursor:pointer;">
+      <div class="dest-card-bg bg-aulani"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <p class="dest-region">Disney</p>
+        <h3 class="dest-name">Aulani, Hawaii</h3>
+      </div>
+    </div>
+    </a>
+    <a href="universal-hollywood.html" style="text-decoration:none;display:contents;">
+    <div class="dest-card" style="cursor:pointer;">
+      <div class="dest-card-bg bg-universal-hollywood"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <p class="dest-region">Universal</p>
+        <h3 class="dest-name">Universal Hollywood</h3>
+      </div>
+    </div>
+    </a>
   </div>
 </section>
 
@@ -485,14 +506,14 @@
         <li><a href="disneyland.html">Disneyland Resort</a></li>
         <li><a href="disney-cruise.html">Disney Cruise Line</a></li>
         <li><a href="#">Disneyland Paris</a></li>
-        <li><a href="#">Aulani, Hawaii</a></li>
+        <li><a href="aulani.html">Aulani, Hawaii</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Universal</h4>
       <ul class="footer-links">
         <li><a href="universal-orlando.html">Universal Orlando</a></li>
-        <li><a href="#">Universal Hollywood</a></li>
+        <li><a href="universal-hollywood.html">Universal Hollywood</a></li>
         <li><a href="#">Epic Universe</a></li>
         <li><a href="#">Express Pass Tips</a></li>
         <li><a href="#">On-Site Hotels</a></li>
